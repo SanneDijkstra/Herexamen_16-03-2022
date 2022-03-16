@@ -1,0 +1,233 @@
+import math
+import random
+import time
+from datetime import datetime
+
+
+"""
+HEREXAMEN 16-03-2022 Sanne Dijkstra
+"""
+
+
+#-----DICTIONARIES-----
+#Dictionary met alle programmeurs:
+prog_dict = {
+    "PROG1" : {"Naam" : "Sanne Dijkstra", "Starjaar" : "2021", "Maandloon" : 2200, "Talen" : ["Python", "SQL", "Java"]},
+    "PROG2" : {"Naam" : "Emma Bakker", "Starjaar" : "2019", "Maandloon" : 2600, "Talen" : ["Python", "HTML"]},
+    "PROG3" : {"Naam" : "Bart Janssen", "Starjaar" : "2012", "Maandloon" : 2800, "Talen" : ["Python", "Java", "C#"]},
+    "PROG4" : {"Naam" : "Jan Hendriks", "Starjaar" : "2008", "Maandloon" : 3200, "Talen" : ["C#", "HTML"]},
+    "PROG5" : {"Naam" : "Ivo Poortema", "Starjaar" : "2014", "Maandloon" : 2900, "Talen" : ["SQL", "C#"]},
+    "PROG6" : {"Naam" : "Rick Dijksma", "Starjaar" : "2013", "Maandloon" : 3000, "Talen" : ["Java", "C#"]}
+}
+
+
+#Dictionary met alle freelancers:
+fr_dict = {
+    "FR1" : {"Naam" : "Sander Vervoort", "Uurloon" : 50, "Talen" : ["Python", "SQL", "Java"]},
+    "FR2" : {"Naam" : "Emma Bakker", "Uurloon" : 35, "Talen" : ["Python", "C#"]},
+    "FR3" : {"Naam" : "Bart Janssen", "Uurloon" : 40, "Talen" : ["Python", "Java", "C#"]},
+    "FR4" : {"Naam" : "Jeroen Janse", "Uurloon" : 45, "Talen" : ["Python", "Java"]}
+}
+
+
+#Dictionary met alle projecten:
+p_dict = {
+    "P1" : {"Beschrijving" : "UI", "Kosten" : 5000, "Prijs" : 10000},
+    "P2" : {"Beschrijving" : "Excel", "Kosten" : 750, "Prijs" : 1500},
+    "P3" : {"Beschrijving" : "SAP", "Kosten" : 7000, "Prijs" : 16000},
+    "P4" : {"Beschrijving" : "MATLAB", "Kosten" : 8000, "Prijs" : 20000}
+}
+
+
+
+
+#-----FUNCTIES-----
+#Deze functie geeft het keuzemenu:
+def print_opties_keuzemenu():
+    print("Je kan kiezen uit:")
+    print("1: Toon medewerkers per categorie. Programmeurs of freelancers?")
+    print("2: Toon alle projecten.")
+    print("3: Voeg een medewerker toe. Programmeur of freelancer?")
+    print("4: Voeg project toe.")
+    print("5: Voeg een programmeertaal toe aan programmeur of freelancer.")
+    print("6: Verwijder een medewerker. Programmeur of freelancer?")
+    print("7: Verwijder een project.")
+    print("8: Bereken de maandelijkse loonkosten van de programmeurs.")
+    print("9: Bereken de verdiensten van de projecten.")
+    print("10: Soorteer de medewerkers op basis van dienstjaren.")
+
+
+#Toon alle medewerkers per categorie. De programmeertalen worden weergegeven als een lijst.
+def toon_medewerkers(dict):
+    for k, v in dict.items():
+        print("ID", ":", k)
+        for x, y in v.items():
+            print(x, ":", y)
+        print("\n")
+
+
+#Toon alle projecten.
+def toon_projecten(dict):
+    for k, v in dict.items():
+        print("ID", ":", k)
+        for x, y in v.items():
+            print(x, ":", y)
+        print("\n")
+
+
+#Voeg een medewerker toe. In eerste instante wordt een een lege lijst met talen meegegeven.
+def voeg_medewerker_toe():
+    mdw = input("Wil je een programmeur of een freelancer toevoegen?")
+    if(mdw == "Programmeur"):
+        ID = input("Geef het ID van de programmeur:")
+        naam = input("Geef de naam van de programmeur:")
+        startjaar = input("In welk jaar is deze programmeur gestart?")
+        maandloon = input("Wat is het maandloon van de programmeur?")
+        taal = []
+        prog_dict.update({ID: {"Naam": naam, "Startjaar": startjaar, "Maandloon": maandloon, "Talen" : taal}})
+    elif(mdw == "Freelancer"):
+        ID = input("Geef het ID van de freelancer:")
+        naam = input("Geef de naam van de freelancer:")
+        uurloon = input("Wat is het uurloon van de freelancer?")
+        taal = []
+        fr_dict.update({ID: {"Naam": naam, "Uurloon": uurloon, "Talen" : taal}})
+    else:
+        print("De medewerker kan niet toegevoegd worden!")
+
+
+#Voeg een project toe.
+def voeg_project_toe():
+    ID = input("Geef het ID van het project:")
+    beschr = input("Geef een omschrijving van het project:")
+    kosten = input("Hoeveel kost dit project het bedrijf?")
+    prijs = input("Welke prijs vraagt het bedrijf voor dit project?")
+    p_dict.update({ID: {"Beschrijving": beschr, "Kosten": kosten, "Prijs": prijs}})
+
+
+#Voeg een programmeertaal toe aan programmeur of freelancer.
+def voeg_taal_toe():
+    mdw = input("Wil je aan een programmeur of een freelancer een taal toevoegen?")
+    if(mdw == "Programmeur"):
+        for p in prog_dict.keys():
+            print(p)
+
+        keuze_pr = input("Geef het ID van de programmeur: ")
+        if(keuze_pr in prog_dict.keys()):
+            keuze_taal = input("Welke taal wil je toevoegen?").capitalize()
+            if(keuze_taal not in [x.capitalize() for x in prog_dict[keuze_pr]["Talen"]]):
+                prog_dict[keuze_pr]["Talen"].append(keuze_taal)
+            else:
+                print(f"{keuze_pr} kent {keuze_taal} al.")
+        else:
+            print("Deze programmeur bestaat niet.")
+    elif(mdw == "Freelancer"):
+        for f in fr_dict.keys():
+            print(f)
+
+        keuze_fr = input("Geef het ID van de freelancer: ")
+        if(keuze_fr in fr_dict.keys()):
+            keuze_taal = input("Welke taal wil je toevoegen?").capitalize()
+            if(keuze_taal not in [x.capitalize() for x in fr_dict[keuze_fr]["Talen"]]):
+                fr_dict[keuze_fr]["Talen"].append(keuze_taal)
+            else:
+                print(f"{keuze_fr} kent {keuze_taal} al.")
+        else:
+            print("Deze programmeur bestaat niet.")
+
+
+#Verwijder een medewerker.
+def verwijder_medewerker():
+    mdw = input("Wil je aan een programmeur of een freelancer verwijderen?")
+    if(mdw == "Programmeur"):
+        for k, v in prog_dict.items():
+            print(k,":", v["Naam"])
+        keuze_pr = input("Geef het ID van de programmeur: ")
+        if(keuze_pr in prog_dict.keys()):
+            bev = input(f"Weet je zeker dat je {keuze_pr} wilt verwijderen? J/N?")
+            if(bev == "J"):
+                prog_dict.pop(keuze_pr)
+                print(f"{keuze_pr} is verwijderd!")
+            else:
+                print("Het process is afgebroken.")
+        else:
+            print("Deze programmeur bestaat niet.")
+    elif(mdw == "Freelancer"):
+        for k, v in fr_dict.items():
+            print(k, ":", v["Naam"])
+        keuze_fr = input("Geef het ID van de freelancer: ")
+        if(keuze_fr in fr_dict.keys()):
+            bev = input(f"Weet je zeker dat je {keuze_fr} wilt verwijderen? J/N?")
+            if(bev == "J"):
+                fr_dict.pop(keuze_fr)
+                print(f"{keuze_fr} is verwijderd!")
+            else:
+                print("Het process is afgebroken.")
+        else:
+            print("Deze freelancer bestaat niet.")
+    else:
+        print("Kies enkel programmeur of freelancer.")
+
+
+#Verwijder een project.
+def verwijder_project():
+    for k, v in p_dict.items():
+        print(k,":", v["Beschrijving"])
+    keuze_p = input("Geef het ID van het project: ")
+    if(keuze_p in p_dict.keys()):
+        bev = input(f"Weet je zeker dat je {keuze_p} wilt verwijderen? J/N?")
+        if(bev == "J"):
+            p_dict.pop(keuze_p)
+            print(f"{keuze_p} is verwijderd!")
+
+
+#Bereken de maandelijkse loonkosten van de programmeurs.
+def som_loon_prog():
+    for k, v in prog_dict.items():
+        print(k, ":", int(v["Maandloon"]))
+
+
+#Bereken de verdiensten van de projecten.
+def verd_project():
+    for k, v in p_dict.items():
+        verd = v["Prijs"] - v["Kosten"]
+        print("De verdiensten van project", k, "zijn:", verd, "euro.")
+
+
+#Soorteer de medewerkers op basis van dienstjaren.
+def sorteer_jaar():
+    pass
+
+
+# -----HOOFDPROGRAMMA-----
+print_opties_keuzemenu()
+invoer = input("Wat wil je doen? Geef het juiste cijfer in of typ ''Stop''.")
+while(not invoer == "Stop"):
+    if(invoer == "1"):
+        d = input("Programmeurs of freelancers?")
+        if (d == "Programmeurs"):
+            toon_medewerkers(prog_dict)
+        elif (d == "Freelancers"):
+            toon_medewerkers(fr_dict)
+        else:
+            print("Deze dictionary bestaat niet.")
+    if(invoer == "2"):
+        toon_projecten(p_dict)
+    if(invoer == "3"):
+        voeg_medewerker_toe()
+    if(invoer == "4"):
+        voeg_project_toe()
+    if(invoer == "5"):
+        voeg_taal_toe()
+    if(invoer == "6"):
+        verwijder_medewerker()
+    if(invoer == "7"):
+        verwijder_project()
+    if(invoer == "8"):
+        som_loon_prog()
+    if(invoer == "9"):
+        verd_project()
+    if(invoer == "10"):
+        sorteer_jaar()
+
+    print_opties_keuzemenu()
+    invoer = input("Wat wil je doen? Geef het juiste cijfer in of typ ''Stop''.")
